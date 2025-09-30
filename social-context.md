@@ -24,7 +24,7 @@ The project aligns with multiple guilds within the broader community:
 
 ### Technical Collaborations
 - **Ollama Project** - Local LLM integration and optimization
-- **ChromaDB/FAISS Communities** - Vector database and retrieval systems
+- **Shell Utilities Communities** - Command-line tools and text processing systems
 - **Python CLI Development Community** - Best practices and standards
 
 ## Use Cases and User Stories

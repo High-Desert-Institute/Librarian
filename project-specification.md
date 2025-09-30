@@ -97,8 +97,9 @@ This MVP is the first concrete “oracle” in the HDI stack. Future versions ad
 
 4. **RAG Service**
 
-   * Local corpus (schedule, org docs); embeddings in **ChromaDB/FAISS**
-   * Retriever (k-NN) → lightweight re-rank → prompt assembly
+   * Local corpus (schedule, org docs); markdown-based knowledge base
+   * Shell-based file operations (grep, cat, head, tail, sed) for document search and retrieval
+   * Direct file access with security constraints and input sanitization
 
 5. **LLM Client** (Ollama)
 
@@ -129,7 +130,7 @@ This MVP is the first concrete “oracle” in the HDI stack. Future versions ad
                                                        ↓             │
                           [Announcement Scheduler] → [Adapter] ← [Responder Worker]
                                                            ↑         │
-                                                     [LLM Client] ← [RAG Service] ← [Vector DB + Corpus]
+                                                     [LLM Client] ← [RAG Service] ← [Shell Tools + Knowledge Base]
 ```
 
 ### 4.3 Directory Layout
@@ -153,8 +154,8 @@ hdl/
 │  └─ orgs.yml           # org short blurbs, canonical names
 ├─ corpus/
 │  ├─ docs/              # PDFs, txt, md (input)
-│  ├─ processed/         # chunked, cleaned
-│  └─ index/             # embeddings db (Chroma/FAISS)
+│  ├─ processed/         # chunked, cleaned markdown files
+│  └─ knowledge/          # organized markdown knowledge base
 ├─ ops/
 │  ├─ systemd/*.service
 │  ├─ scripts/*.sh
@@ -197,7 +198,7 @@ hdl/
 * Worker loop:
 
   1. Formulate retrieval query
-  2. Fetch top-k passages (hybrid lexical/vector optional)
+  2. Search markdown files using shell tools (grep, cat, head, tail)
   3. Compose compact prompt (low-bandwidth output)
   4. Generate answer with Qwen3-4B
   5. Post reply DM; log Q/A pair for eval
@@ -217,7 +218,7 @@ hdl/
 * `hdl status` — services, queue depth, last announce, last error
 * `hdl broadcast "msg"` — immediate group message
 * `hdl schedule reload` — re-read `schedule.yml`
-* `hdl corpus ingest` — (re)build embeddings
+* `hdl corpus ingest` — (re)organize markdown knowledge base
 * `hdl tail` — follow logs
 * Exit codes standard Unix semantics
 
@@ -258,10 +259,10 @@ max_tokens = 256
 temperature = 0.3
 
 [rag]
-db_path = "./corpus/index"
-top_k = 6
+knowledge_path = "./corpus/knowledge"
 max_chunk_tokens = 350
-fallback_lexical = true
+search_tools = ["grep", "cat", "head", "tail", "sed"]
+security_enabled = true
 
 [announce]
 schedule_file = "./configs/schedule.yml"
@@ -327,7 +328,7 @@ orgs:
 
 ### 8.1 Corpus Sources (initial)
 
-* **Schedule** (from `schedule.yml` → structured index)
+* **Schedule** (from `schedule.yml` → organized markdown files)
 * **Organizations** capsules (`orgs.yml` + 1-page blurbs in `corpus/docs/orgs/`)
 * **Programming details** (e.g., stage maps, policies)
 * Preferred formats: `.md`, `.txt`, `.pdf` (extract to text)
@@ -335,15 +336,16 @@ orgs:
 ### 8.2 Ingestion Pipeline
 
 * Normalize → split into chunks (~300–500 tokens)
-* Generate embeddings to **Chroma/FAISS** at `./corpus/index`
-* Maintain `doc_id`, `chunk_id`, `source_path`, `title`, `updated_at`
+* Organize markdown files in `./corpus/knowledge/` directory structure
+* Maintain file metadata: `source_path`, `title`, `updated_at`
 * Rebuild via `hdl corpus ingest`
 
 ### 8.3 Retrieval Strategy
 
-* Primary: vector top-k
-* Secondary: lexical/BM25 fallback if empty or low-score
-* Re-rank option (lightweight cosine boost by metadata match on org/stage)
+* Primary: shell-based file search using grep for text matching
+* Secondary: direct file reading using cat/head/tail for content access
+* File filtering and sorting within knowledge directory only
+* Security: input sanitization and path validation for all operations
 
 ### 8.4 Prompting Guidelines (compact, LoRa-friendly)
 
@@ -371,9 +373,9 @@ Please answer in ≤4 short lines.
 1. Flash **Raspberry Pi OS (64-bit, Lite)**
 2. `sudo apt update && sudo apt install -y python3-pip git jq tmux`
 3. Install **Ollama** (ARM build) and `ollama pull qwen3:4b-instruct-q4`
-4. `pip install meshtastic python-dotenv chromadb faiss-cpu uvloop` (or requirements.txt)
+4. `pip install meshtastic python-dotenv uvloop` (or requirements.txt)
 5. Clone repo, place `configs/`, `corpus/`
-6. Build index: `hdl corpus ingest`
+6. Organize knowledge base: `hdl corpus ingest`
 7. Test Meshtastic serial connection (see `ops/scripts/meshtastic_probe.sh`)
 
 ### 9.2 Services (systemd)
@@ -518,7 +520,7 @@ WantedBy=multi-user.target
 ### Mid-Term
 
 * **Inter-node sync** (LoRa opportunistic, IPFS when possible)
-* **Content packs** (zip of corpus + embeddings for drop-in updates)
+* **Content packs** (zip of corpus + markdown files for drop-in updates)
 * **Priority queues** (urgent vs normal DM; operator priority)
 * **Hybrid retrieval** (fuzzy name resolution, schedule macros)
 

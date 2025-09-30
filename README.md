@@ -23,7 +23,7 @@ The Librarian is a self-contained, off-grid digital assistant designed to operat
 - **Group Chat Integration**: Monitors group channels for messages starting with "librarian" or replies to its own posts
 - **Scheduled Announcements**: Automatically posts timed announcements to group channels
 - **Offline Operation**: Fully functional without internet connectivity
-- **Local RAG System**: Retrieval-Augmented Generation using local documents and vector search
+- **Local RAG System**: Retrieval-Augmented Generation using local markdown documents and shell-based search
 - **Natural Delay Philosophy**: Responses take time due to compute limitations, creating a reflective interaction style
 
 ## Repository Structure
@@ -54,25 +54,24 @@ The project is currently in the initial planning phase. The comprehensive roadma
 - [x] Comprehensive roadmap creation (`project-roadmap.md`)
 - [x] Development styleguide documentation
 - [x] Repository structure setup
-- [x] **Phase 1.1 Complete**: Project setup, CLI framework, logging system, testing framework
-- [x] **Phase 1.2 Complete**: Configuration management, secrets handling, validation system
 
 ### Next Steps (Phase 1: Foundation & Core Infrastructure)
 
 The immediate next steps include:
 
-1. **Logging & Monitoring** (Phase 1.3)
-   - Add log rotation (daily or 5MB)
-   - Create log tail functionality for CLI
-   - Add performance metrics collection
-   - Implement error tracking and reporting
+1. **Project Setup and CLI Framework** (Phase 1.1)
+   - Create project structure and basic CLI framework
+   - Implement structured JSON logging system
+   - Add log rotation and performance metrics
+   - Create testing framework with pytest
+   - Add Makefile for common development tasks
 
-2. **Basic RAG Pipeline** (Phase 1.4)
-   - Create document ingestion system for project/org history
-   - Implement basic text chunking and preprocessing
-   - Add simple vector embeddings generation
-   - Create basic retrieval system for document search
-   - Implement simple query processing and response generation
+2. **Configuration and Secrets Management** (Phase 1.2)
+   - Implement TOML-based configuration system
+   - Create secrets management for channel PSKs
+   - Add configuration validation and error handling
+   - Implement secrets file permissions (0600)
+   - Create configuration documentation
 
 ## Project Roadmap
 
@@ -105,7 +104,7 @@ The system consists of several key components:
 - **Meshtastic Adapter**: USB serial communication with LoRa radio
 - **Message Router**: Classifies incoming messages (DMs, group mentions, announcements)
 - **Persistent Queue**: Disk-backed message queue for reliability
-- **RAG Service**: Local knowledge base with vector search
+- **RAG Service**: Local markdown knowledge base with shell-based file search
 - **LLM Client**: Local Ollama integration with Qwen3-4B model
 - **Announcement Scheduler**: Timed message broadcasting
 - **Operator CLI**: Management and monitoring interface
@@ -173,4 +172,4 @@ For questions about the project, please refer to the project specification and r
 
 *Last updated: December 2024*
 *Current phase: Planning & Foundation*
-*Next milestone: Phase 1 - Foundation & Core Infrastructure*
+*Next milestone: Phase 1.1 - Project Setup and CLI Framework*
