@@ -1,0 +1,3 @@
+[submodule "styleguides"]
+	path = styleguides
+	url = https://github.com/cjtrowbridge/agentic-styleguides/
