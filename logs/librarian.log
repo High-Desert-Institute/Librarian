@@ -1,0 +1,2 @@
+{"timestamp": "2025-09-30T18:44:49.731817Z", "level": "INFO", "module": "logging", "function": "setup_logging", "line": 119, "message": "Logging system initialized", "component": "logging", "phase": "startup"}
+{"timestamp": "2025-09-30T18:44:49.732817Z", "level": "INFO", "module": "main", "function": "handle_status", "line": 97, "message": "Status command requested"}

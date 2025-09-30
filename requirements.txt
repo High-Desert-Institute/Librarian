@@ -1,0 +1,25 @@
+# Core dependencies
+toml>=0.10.2
+python-dotenv>=1.0.0
+
+# Meshtastic integration
+meshtastic>=1.2.50
+
+# RAG and vector database
+chromadb>=0.4.0
+faiss-cpu>=1.7.4
+
+# LLM integration
+ollama>=0.1.0
+
+# Async support
+uvloop>=0.17.0
+
+# Testing
+pytest>=7.0.0
+pytest-asyncio>=0.21.0
+
+# Development
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.0.0
