@@ -1,421 +1,470 @@
 # Librarian Project Roadmap
 
-*Last updated: December 2024*  
-*Target: Meshtastic-focused digital librarian for off-grid knowledge sharing*
-
 ## Roadmap Status Legend
 
 - **[ ]** - Not started
-- **[?]** - In progress / Testing / Development
+- **[?]** - In progress / Testing / Development  
 - **[x]** - Completed and tested
 
 **Important**: This roadmap must be kept current. Update checkbox status whenever tasks are started, completed, or when project details change. All changes to the project should be reflected in this roadmap.
 
-## Executive Summary
-
-This roadmap outlines the development path for the Librarian project - a free, open-source, Meshtastic-focused digital librarian that can reply to direct messages and respond to group chat messages that start with "librarian" or are replies to its own posts. The system will run on a Raspberry Pi 5 with local LLM capabilities, providing offline-first knowledge sharing through the Meshtastic LoRa network.
-
-## Project Goals
-
-- **Primary Goal**: Create a self-contained, off-grid Librarian node that can answer questions via Meshtastic DMs and group chat
-- **Secondary Goal**: Provide scheduled announcements to group channels
-- **Tertiary Goal**: Build a foundation for future features like BBS, MUD, and multi-agent personas
-
-## Architecture Overview
-
-The system consists of several key components:
-- **Meshtastic Adapter**: USB serial communication with LoRa radio
-- **Message Router**: Classifies incoming messages (DMs, group mentions, announcements)
-- **Persistent Queue**: Disk-backed message queue for reliability
-- **RAG Service**: Local knowledge base with vector search
-- **LLM Client**: Local Ollama integration with Qwen3-4B model
-- **Announcement Scheduler**: Timed message broadcasting
-- **Operator CLI**: Management and monitoring interface
-
 ---
 
-## Phase 1: Foundation & Core Infrastructure
+## Phase 1: Foundation and Core Infrastructure
 
-### 1.1 Project Setup & Structure
-- [x] **1.1.1** Create project directory structure following the specification
-- [x] **1.1.2** Set up Python virtual environment and dependencies
-- [x] **1.1.3** Create basic configuration system (`config.toml`)
-- [x] **1.1.4** Implement logging system with structured JSON output
-- [x] **1.1.5** Create basic CLI framework with argparse
-- [x] **1.1.6** Set up testing framework and initial test structure
+### 1.1 Project Setup and CLI Framework
+- [x] **1.1.1** Create project structure and basic CLI framework
+- [x] **1.1.2** Implement structured JSON logging system
+- [x] **1.1.3** Add log rotation and performance metrics
+- [x] **1.1.4** Create testing framework with pytest
+- [x] **1.1.5** Add Makefile for common development tasks
 
-### 1.2 Configuration Management
-- [x] **1.2.1** Implement TOML configuration parser
+### 1.2 Configuration and Secrets Management
+- [x] **1.2.1** Implement TOML-based configuration system
 - [x] **1.2.2** Create secrets management for channel PSKs
 - [x] **1.2.3** Add configuration validation and error handling
-- [x] **1.2.4** Implement configuration reload functionality
-- [x] **1.2.5** Create default configuration templates
+- [x] **1.2.4** Implement secrets file permissions (0600)
+- [x] **1.2.5** Create configuration documentation
 
-### 1.3 Logging & Monitoring
+### 1.3 Logging and Monitoring
 - [x] **1.3.1** Implement structured JSON logging
-- [ ] **1.3.2** Add log rotation (daily or 5MB)
-- [ ] **1.3.3** Create log tail functionality for CLI
-- [ ] **1.3.4** Add performance metrics collection
-- [ ] **1.3.5** Implement error tracking and reporting
+- [x] **1.3.2** Add log rotation (daily or 5MB, 5 backups)
+- [x] **1.3.3** Create log tailing functionality
+- [x] **1.3.4** Add performance metrics collection
+- [x] **1.3.5** Implement system health monitoring
 
-### 1.4 Basic RAG Pipeline
-- [ ] **1.4.1** Create document ingestion system for project/org history
-- [ ] **1.4.2** Implement basic text chunking and preprocessing
-- [ ] **1.4.3** Add simple vector embeddings generation
-- [ ] **1.4.4** Create basic retrieval system for document search
-- [ ] **1.4.5** Implement simple query processing and response generation
+### 1.4 Knowledge Base Setup
+- [x] **1.4.1** Create knowledge directory structure
+- [x] **1.4.2** Implement markdown file organization
+- [x] **1.4.3** Add file metadata and tagging system
+- [x] **1.4.4** Create knowledge base validation
+- [x] **1.4.5** Implement file discovery and indexing
 
----
-
-## Phase 2: Meshtastic Integration
-
-### 2.1 Meshtastic Adapter Development
-- [ ] **2.1.1** Research and implement Meshtastic Python library integration
-- [ ] **2.1.2** Create USB serial communication layer
-- [ ] **2.1.3** Implement auto-discovery of serial devices
-- [ ] **2.1.4** Add connection management and error handling
-- [ ] **2.1.5** Create message serialization/deserialization
-
-### 2.2 Message Handling System
-- [ ] **2.2.1** Implement message classification (DM, group, admin)
-- [ ] **2.2.2** Create message routing logic
-- [ ] **2.2.3** Add message filtering and validation
-- [ ] **2.2.4** Implement rate limiting and backpressure handling
-- [ ] **2.2.5** Create message acknowledgment system
-
-### 2.3 Group Chat Integration
-- [ ] **2.3.1** Implement group channel subscription
-- [ ] **2.3.2** Add message parsing for "librarian" mentions
-- [ ] **2.3.3** Create reply detection for librarian posts
-- [ ] **2.3.4** Implement group message broadcasting
-- [ ] **2.3.5** Add message threading support
-
-### 2.4 Direct Message System
-- [ ] **2.4.1** Implement DM reception and parsing
-- [ ] **2.4.2** Create DM response system
-- [ ] **2.4.3** Add message queuing for DMs
-- [ ] **2.4.4** Implement DM acknowledgment ("Consulting the archives...")
-- [ ] **2.4.5** Create DM response formatting
+### 1.5 Universal Chat Interface (Multi-Modal Foundation)
+- [x] **1.5.1** Create universal message processor for any source
+- [x] **1.5.2** Implement response router for multiple interfaces
+- [x] **1.5.3** Build universal chat interface coordinator
+- [x] **1.5.4** Add CLI chat interface for testing
+- [x] **1.5.5** Create message/response data structures
 
 ---
 
-## Phase 3: Persistent Queue System
+## Phase 2: REST API Development
 
-### 3.1 Queue Implementation
-- [ ] **3.1.1** Design disk-backed queue data structure
-- [ ] **3.1.2** Implement FIFO queue with JSON records
-- [ ] **3.1.3** Add queue persistence across reboots
-- [ ] **3.1.4** Create queue monitoring and statistics
-- [ ] **3.1.5** Implement queue recovery and repair
+### 2.1 REST API Foundation
+- [ ] **2.1.1** Design REST API architecture and endpoints
+- [ ] **2.1.2** Implement FastAPI/Flask web framework integration
+- [ ] **2.1.3** Create API authentication and authorization system
+- [ ] **2.1.4** Add API documentation with OpenAPI/Swagger
+- [ ] **2.1.5** Implement API versioning and error handling
 
-### 3.2 Queue Management
-- [ ] **3.2.1** Add priority field support (future use)
-- [ ] **3.2.2** Implement queue depth monitoring
-- [ ] **3.2.3** Create queue inspection CLI commands
-- [ ] **3.2.4** Add queue cleanup and maintenance
-- [ ] **3.2.5** Implement queue performance metrics
+### 2.2 Core API Endpoints
+- [ ] **2.2.1** Implement `/chat` endpoint for message processing
+- [ ] **2.2.2** Create `/health` endpoint for system status
+- [ ] **2.2.3** Add `/stats` endpoint for system statistics
+- [ ] **2.2.4** Implement `/admin` endpoints for system management
+- [ ] **2.2.5** Create WebSocket support for real-time chat
 
----
-
-## Phase 4: Advanced RAG System Development
-
-### 4.1 Enhanced Corpus Ingestion
-- [ ] **4.1.1** Implement advanced document parsing (PDF, TXT, MD)
-- [ ] **4.1.2** Create intelligent text chunking and preprocessing
-- [ ] **4.1.3** Add metadata extraction and tagging
-- [ ] **4.1.4** Implement corpus indexing system
-- [ ] **4.1.5** Create corpus validation and testing
-
-### 4.2 Advanced Vector Database Integration
-- [ ] **4.2.1** Integrate ChromaDB or FAISS for embeddings
-- [ ] **4.2.2** Implement advanced embedding generation pipeline
-- [ ] **4.2.3** Create vector index management
-- [ ] **4.2.4** Add embedding model configuration
-- [ ] **4.2.5** Implement vector database backup/restore
-
-### 4.3 Retrieval System
-- [ ] **4.3.1** Implement k-NN vector search
-- [ ] **4.3.2** Add hybrid lexical/vector search
-- [ ] **4.3.3** Create re-ranking system
-- [ ] **4.3.4** Implement query expansion
-- [ ] **4.3.5** Add retrieval quality metrics
-
-### 4.4 RAG Pipeline
-- [ ] **4.4.1** Create prompt assembly system
-- [ ] **4.4.2** Implement context window management
-- [ ] **4.4.3** Add response quality validation
-- [ ] **4.4.4** Create RAG performance monitoring
-- [ ] **4.4.5** Implement RAG testing framework
+### 2.3 API Integration
+- [ ] **2.3.1** Integrate REST API with universal chat interface
+- [ ] **2.3.2** Add API response routing to response router
+- [ ] **2.3.3** Implement API rate limiting and security
+- [ ] **2.3.4** Add API logging and monitoring
+- [ ] **2.3.5** Create API configuration management
 
 ---
 
-## Phase 5: LLM Integration
+## Phase 3: Comprehensive Test Suite
 
-### 5.1 Ollama Integration
-- [ ] **5.1.1** Install and configure Ollama on Pi 5
-- [ ] **5.1.2** Download and test Qwen3-4B model
-- [ ] **5.1.3** Create Ollama client wrapper
-- [ ] **5.1.4** Implement model configuration management
-- [ ] **5.1.5** Add model performance monitoring
+### 3.1 Test Framework Setup
+- [ ] **3.1.1** Create test directory structure (`tests/api/`)
+- [ ] **3.1.2** Implement pytest-based test framework
+- [ ] **3.1.3** Add test data fixtures and mock services
+- [ ] **3.1.4** Create test configuration management
+- [ ] **3.1.5** Implement test result logging and reporting
 
-### 5.2 LLM Client Development
-- [ ] **5.2.1** Implement streaming and non-streaming generation
-- [ ] **5.2.2** Create prompt template system
-- [ ] **5.2.3** Add response formatting and validation
-- [ ] **5.2.4** Implement context length management
-- [ ] **5.2.5** Create LLM error handling and retry logic
+### 3.2 API Test Suite
+- [ ] **3.2.1** Create REST API endpoint tests
+- [ ] **3.2.2** Implement chat interface integration tests
+- [ ] **3.2.3** Add RAG pipeline API tests
+- [ ] **3.2.4** Create authentication and authorization tests
+- [ ] **3.2.5** Implement API performance and load tests
 
-### 5.3 Response Generation
-- [ ] **5.3.1** Implement compact response generation
-- [ ] **5.3.2** Add message chunking for long responses
-- [ ] **5.3.3** Create response quality filtering
-- [ ] **5.3.4** Implement response caching
-- [ ] **5.3.5** Add response performance metrics
+### 3.3 Feature Test Suite
+- [ ] **3.3.1** Create message processing tests for all sources
+- [ ] **3.3.2** Implement response routing tests
+- [ ] **3.3.3** Add RAG pipeline functionality tests
+- [ ] **3.3.4** Create configuration and secrets tests
+- [ ] **3.3.5** Implement logging and monitoring tests
 
----
+### 3.4 Test Automation
+- [ ] **3.4.1** Add Makefile `test-all` recipe
+- [ ] **3.4.2** Implement continuous integration test pipeline
+- [ ] **3.4.3** Create test result reporting and notifications
+- [ ] **3.4.4** Add test coverage reporting
+- [ ] **3.4.5** Implement automated test execution on changes
 
-## Phase 6: Announcement System
+### 3.5 Test Requirements for New Features
+- [ ] **3.5.1** Define test requirements for all new features
+- [ ] **3.5.2** Create test templates for common feature types
+- [ ] **3.5.3** Implement test validation in CI/CD pipeline
+- [ ] **3.5.4** Add test documentation and guidelines
+- [ ] **3.5.5** Create test maintenance and update procedures
 
-### 6.1 Schedule Management
-- [ ] **6.1.1** Create YAML schedule parser
-- [ ] **6.1.2** Implement event template system
-- [ ] **6.1.3** Add schedule validation and testing
-- [ ] **6.1.4** Create schedule reload functionality
-- [ ] **6.1.5** Implement schedule backup/restore
-
-### 6.2 Announcement Scheduler
-- [ ] **6.2.1** Implement timed announcement system
-- [ ] **6.2.2** Add relative notification support (T-30, T-10, START)
-- [ ] **6.2.3** Create announcement de-duplication
-- [ ] **6.2.4** Implement urgent broadcast override
-- [ ] **6.2.5** Add announcement logging and tracking
-
-### 6.3 Message Templates
-- [ ] **6.3.1** Create template system for announcements
-- [ ] **6.3.2** Implement variable substitution
-- [ ] **6.3.3** Add template validation
-- [ ] **6.3.4** Create template testing framework
-- [ ] **6.3.5** Implement template customization
+### 3.6 Random Seed Control for Testing
+- [ ] **3.6.1** Implement random seed configuration for LLM responses
+- [ ] **3.6.2** Add seed-based test data generation
+- [ ] **3.6.3** Create deterministic test scenarios
+- [ ] **3.6.4** Implement seed validation in test framework
+- [ ] **3.6.5** Add seed documentation and best practices
 
 ---
 
-## Phase 7: Operator CLI
+## Phase 4: Meshtastic Integration
 
-### 7.1 CLI Framework
-- [ ] **7.1.1** Implement comprehensive CLI with subcommands
-- [ ] **7.1.2** Add status monitoring commands
-- [ ] **7.1.3** Create broadcast functionality
-- [ ] **7.1.4** Implement schedule management commands
-- [ ] **7.1.5** Add corpus management commands
+### 4.1 Meshtastic Adapter Development
+- [ ] **4.1.1** Implement USB serial communication with LoRa radio
+- [ ] **4.1.2** Create message parsing for `#decomp25` channel
+- [ ] **4.1.3** Add direct message (DM) endpoint handling
+- [ ] **4.1.4** Implement message normalization and formatting
+- [ ] **4.1.5** Create Meshtastic connection management
 
-### 7.2 Monitoring & Diagnostics
-- [ ] **7.2.1** Create system status dashboard
-- [ ] **7.2.2** Add queue depth monitoring
-- [ ] **7.2.3** Implement service health checks
-- [ ] **7.2.4** Create performance metrics display
-- [ ] **7.2.5** Add error reporting and diagnostics
+### 4.2 Message Classification
+- [ ] **4.2.1** Implement message router for different types
+- [ ] **4.2.2** Add DM detection and processing
+- [ ] **4.2.3** Create group mention detection ("librarian")
+- [ ] **4.2.4** Add reply detection for librarian posts
+- [ ] **4.2.5** Implement message threading support
 
-### 7.3 Management Commands
-- [ ] **7.3.1** Implement urgent broadcast override
-- [ ] **7.3.2** Add configuration reload
-- [ ] **7.3.3** Create corpus re-ingestion
-- [ ] **7.3.4** Implement log management
-- [ ] **7.3.5** Add system maintenance commands
+### 4.3 Group Chat Integration
+- [ ] **4.3.1** Implement group message broadcasting
+- [ ] **4.3.2** Add message parsing for "librarian" mentions
+- [ ] **4.3.3** Create reply detection for librarian posts
+- [ ] **4.3.4** Implement group message broadcasting
+- [ ] **4.3.5** Add message threading support
 
----
+### 4.4 Direct Message System
+- [ ] **4.4.1** Implement DM reception and parsing
+- [ ] **4.4.2** Create DM response system
+- [ ] **4.4.3** Add message queuing for DMs
+- [ ] **4.4.4** Implement DM acknowledgment ("Consulting the archives...")
+- [ ] **4.4.5** Create DM response formatting
 
-## Phase 8: Integration & Testing
-
-### 8.1 System Integration
-- [ ] **8.1.1** Integrate all components into unified system
-- [ ] **8.1.2** Implement service orchestration
-- [ ] **8.1.3** Add inter-component communication
-- [ ] **8.1.4** Create system startup/shutdown procedures
-- [ ] **8.1.5** Implement error recovery and resilience
-
-### 8.2 End-to-End Testing
-- [ ] **8.2.1** Create comprehensive test suite
-- [ ] **8.2.2** Implement integration tests
-- [ ] **8.2.3** Add performance testing
-- [ ] **8.2.4** Create load testing scenarios
-- [ ] **8.2.5** Implement stress testing
-
-### 8.3 Field Testing
-- [ ] **8.3.1** Set up two-radio mesh test environment
-- [ ] **8.3.2** Conduct 4-hour continuous operation test
-- [ ] **8.3.3** Perform battery life testing (6-8 hours)
-- [ ] **8.3.4** Test power-loss recovery
-- [ ] **8.3.5** Validate message delivery and response accuracy
+### 4.5 Meshtastic Node Tracking and Relationship Management
+- [ ] **4.5.1** Implement node discovery and logging system
+- [ ] **4.5.2** Create interaction history tracking
+- [ ] **4.5.3** Add relationship mapping between nodes
+- [ ] **4.5.4** Implement vouching system for trust establishment
+- [ ] **4.5.5** Create priority assignment based on relationships
+- [ ] **4.5.6** Add trust score calculation and propagation
+- [ ] **4.5.7** Implement reputation system updates
+- [ ] **4.5.8** Create node relationship dashboard
 
 ---
 
-## Phase 9: Deployment & Operations
+## Phase 5: Persistent Queue System
 
-### 9.1 Systemd Integration
-- [ ] **9.1.1** Create systemd service files
-- [ ] **9.1.2** Implement auto-restart functionality
-- [ ] **9.1.3** Add service dependency management
-- [ ] **9.1.4** Create service monitoring
-- [ ] **9.1.5** Implement graceful shutdown
+### 5.1 Queue Implementation
+- [ ] **5.1.1** Create disk-backed message queue
+- [ ] **5.1.2** Implement FIFO queue for DMs
+- [ ] **5.1.3** Add priority field for future use
+- [ ] **5.1.4** Create queue persistence across reboots
+- [ ] **5.1.5** Implement queue monitoring and statistics
 
-### 9.2 Installation & Setup
-- [ ] **9.2.1** Create installation scripts
-- [ ] **9.2.2** Implement dependency management
-- [ ] **9.2.3** Add configuration setup automation
-- [ ] **9.2.4** Create system requirements validation
-- [ ] **9.2.5** Implement one-click deployment
+### 5.2 Queue Management
+- [ ] **5.2.1** Add queue size monitoring
+- [ ] **5.2.2** Implement queue overflow handling
+- [ ] **5.2.3** Create queue cleanup and maintenance
+- [ ] **5.2.4** Add queue performance metrics
+- [ ] **5.2.5** Implement queue error handling
 
-### 9.3 Documentation & Runbooks
-- [ ] **9.3.1** Create comprehensive README
-- [ ] **9.3.2** Write installation guide
-- [ ] **9.3.3** Create operator runbook
-- [ ] **9.3.4** Add troubleshooting guide
-- [ ] **9.3.5** Create maintenance procedures
+---
+
+## Phase 6: RAG System Development
+
+### 6.1 Markdown Knowledge Base
+- [ ] **6.1.1** Create knowledge directory structure
+- [ ] **6.1.2** Implement markdown file organization
+- [ ] **6.1.3** Add file metadata and tagging system
+- [ ] **6.1.4** Create knowledge base validation
+- [ ] **6.1.5** Implement file discovery and indexing
+
+### 6.2 Shell-Based File Operations (SECURITY CRITICAL)
+- [ ] **6.2.1** Implement grep-based text search (knowledge directory only)
+- [ ] **6.2.2** Add cat/head/tail for file content access (read-only, sanitized)
+- [ ] **6.2.3** Create sed-based text processing (read-only operations only)
+- [ ] **6.2.4** Implement file filtering and sorting (knowledge directory only)
+- [ ] **6.2.5** Add file operation error handling and security logging
+- [ ] **6.2.6** Implement input sanitization and path validation
+- [ ] **6.2.7** Create command whitelist and validation system
+- [ ] **6.2.8** Add audit logging for all file operations
+
+### 6.3 Direct File Retrieval
+- [ ] **6.3.1** Implement file content retrieval
+- [ ] **6.3.2** Add context-aware file selection
+- [ ] **6.3.3** Create file relevance scoring
+- [ ] **6.3.4** Implement file content summarization
+- [ ] **6.3.5** Add file operation performance monitoring
+
+### 6.4 RAG Pipeline
+- [ ] **6.4.1** Create prompt assembly with file content
+- [ ] **6.4.2** Implement context window management
+- [ ] **6.4.3** Add response quality validation
+- [ ] **6.4.4** Create RAG performance monitoring
+- [ ] **6.4.5** Implement RAG testing framework with random seed control
+
+### 6.5 Security Implementation (CRITICAL)
+- [ ] **6.5.1** Implement file operation security constraints
+- [ ] **6.5.2** Create input sanitization system
+- [ ] **6.5.3** Add path validation and directory traversal prevention
+- [ ] **6.5.4** Implement command whitelist and validation
+- [ ] **6.5.5** Add security audit logging and monitoring
+- [ ] **6.5.6** Create security testing framework
+- [ ] **6.5.7** Implement penetration testing for file operations
+- [ ] **6.5.8** Add security documentation and guidelines
+
+---
+
+## Phase 7: LLM Integration - Model Specifics
+
+### 7.1 Ollama Integration
+- [ ] **7.1.1** Install and configure Ollama on Pi 5
+- [ ] **7.1.2** Download and test Qwen3-4B-Instruct-Q8 model
+- [ ] **7.1.3** Download and test Qwen3-4B-Thinking-Q8 model
+- [ ] **7.1.4** Download and test Qwen3-8B-Instruct-Q8 model
+- [ ] **7.1.5** Download and test Qwen3-8B-Thinking-Q8 model
+- [ ] **7.1.6** Create Ollama client wrapper with model selection
+- [ ] **7.1.7** Implement model configuration management
+- [ ] **7.1.8** Add model performance monitoring
+
+### 7.2 Agent Spawner System
+- [ ] **7.2.1** Implement agent spawner coordinator
+- [ ] **7.2.2** Create coordinator/responder agent logic (default: Qwen3-4B/8B-Instruct)
+- [ ] **7.2.3** Create researcher agent logic (default: Qwen3-4B/8B-Thinking)
+- [ ] **7.2.4** Implement agent spawning and tracking system
+- [ ] **7.2.5** Add task delegation and agent coordination
+- [ ] **7.2.6** Create agent lifecycle management
+- [ ] **7.2.7** Implement agent performance monitoring
+- [ ] **7.2.8** Add agent configuration and model selection
+
+### 7.3 Agent Tool System
+- [ ] **7.3.1** Implement agent tool interface and registration system
+- [ ] **7.3.2** Create file search tool (grep-based) for knowledge base
+- [ ] **7.3.3** Create file reading tool (cat/head/tail) for knowledge base
+- [ ] **7.3.4** Implement tool security constraints and validation
+- [ ] **7.3.5** Add tool result parsing and formatting
+- [ ] **7.3.6** Create tool error handling and fallback mechanisms
+- [ ] **7.3.7** Implement tool usage logging and monitoring
+- [ ] **7.3.8** Add tool configuration and permissions
+
+### 7.4 Agent Workflow Implementation
+- [ ] **7.4.1** Implement coordinator/responder agent workflow
+- [ ] **7.4.2** Create researcher agent workflow with tool access
+- [ ] **7.4.3** Implement researcher adversarial feedback system
+- [ ] **7.4.4** Add response confidence scoring
+- [ ] **7.4.5** Implement agent spawning logic based on task type/priority/load
+- [ ] **7.4.6** Create agent coordination and handoff protocols
+- [ ] **7.4.7** Add response assembly and quality filtering
+- [ ] **7.4.8** Implement agent performance metrics and monitoring
+
+### 7.5 Load Monitoring and Priority Processing
+- [ ] **7.5.1** Implement system load monitoring (CPU, memory, queue depth)
+- [ ] **7.5.2** Create priority-based processing system
+- [ ] **7.5.3** Add user priority assignment based on relationships
+- [ ] **7.5.4** Implement dynamic resource allocation
+- [ ] **7.5.5** Create processing level selection logic
+- [ ] **7.5.6** Add load-based agent selection
+- [ ] **7.5.7** Implement priority queue management
+- [ ] **7.5.8** Create load monitoring dashboard
+
+### 7.6 Adversarial Revision System
+- [ ] **7.6.1** Implement adversarial revision for high-priority responses
+- [ ] **7.6.2** Create multi-round quality improvement
+- [ ] **7.6.3** Add consensus-based quality validation
+- [ ] **7.6.4** Implement revision tracking and logging
+- [ ] **7.6.5** Create quality improvement metrics
+- [ ] **7.6.6** Add revision performance monitoring
+- [ ] **7.6.7** Implement revision cost-benefit analysis
+- [ ] **7.6.8** Create revision quality reporting
+
+---
+
+## Phase 8: Announcement System
+
+### 8.1 Announcement Scheduler
+- [ ] **8.1.1** Create announcement scheduling system
+- [ ] **8.1.2** Implement timed message broadcasting
+- [ ] **8.1.3** Add announcement queue management
+- [ ] **8.1.4** Create announcement templates
+- [ ] **8.1.5** Implement announcement logging
+
+### 8.2 Announcement Content
+- [ ] **8.2.1** Create announcement content templates
+- [ ] **8.2.2** Add announcement personalization
+- [ ] **8.2.3** Implement announcement formatting
+- [ ] **8.2.4** Create announcement validation
+- [ ] **8.2.5** Add announcement testing
+
+---
+
+## Phase 9: System Integration and Deployment
+
+### 9.1 System Integration
+- [ ] **9.1.1** Integrate all components into unified system
+- [ ] **9.1.2** Create system startup and shutdown procedures
+- [ ] **9.1.3** Implement system health monitoring
+- [ ] **9.1.4** Add system performance optimization
+- [ ] **9.1.5** Create system documentation
+
+### 9.2 Deployment Preparation
+- [ ] **9.2.1** Create deployment scripts and procedures
+- [ ] **9.2.2** Implement systemd service configuration
+- [ ] **9.2.3** Add system monitoring and alerting
+- [ ] **9.2.4** Create backup and recovery procedures
+- [ ] **9.2.5** Add system maintenance procedures
+
+### 9.3 Production Readiness
+- [ ] **9.3.1** Implement production configuration
+- [ ] **9.3.2** Add production monitoring and logging
+- [ ] **9.3.3** Create production testing procedures
+- [ ] **9.3.4** Implement production security measures
+- [ ] **9.3.5** Add production documentation
 
 ---
 
 ## Phase 10: Advanced Features
 
-### 10.1 Enhanced Message Handling
-- [ ] **10.1.1** Implement @mention detection in group chat
-- [ ] **10.1.2** Add message threading support
-- [ ] **10.1.3** Create conversation context tracking
-- [ ] **10.1.4** Implement message history
-- [ ] **10.1.5** Add conversation analytics
+### 10.1 Advanced RAG Features
+- [ ] **10.1.1** Implement advanced document processing
+- [ ] **10.1.2** Add document summarization capabilities
+- [ ] **10.1.3** Create document relationship mapping
+- [ ] **10.1.4** Implement document versioning
+- [ ] **10.1.5** Add document search optimization
 
-### 10.2 Advanced RAG Features
-- [ ] **10.2.1** Implement multi-modal content support
-- [ ] **10.2.2** Add semantic search improvements
-- [ ] **10.2.3** Create knowledge graph integration
-- [ ] **10.2.4** Implement query understanding
-- [ ] **10.2.5** Add response personalization
-
-### 10.3 Performance Optimization
-- [ ] **10.3.1** Implement response caching
-- [ ] **10.3.2** Add query optimization
-- [ ] **10.3.3** Create resource usage monitoring
-- [ ] **10.3.4** Implement adaptive performance tuning
-- [ ] **10.3.5** Add scalability improvements
+### 10.2 Advanced LLM Features
+- [ ] **10.2.1** Implement advanced prompt engineering
+- [ ] **10.2.2** Add context-aware response generation
+- [ ] **10.2.3** Create response quality assessment
+- [ ] **10.2.4** Implement response personalization
+- [ ] **10.2.5** Add response learning and adaptation
 
 ---
 
-## Phase 11: Future Roadmap Features (Post-MVP)
+## Phase 11: Multi-Modal Access Interfaces
 
-### 11.1 BBS Layer
-- [ ] **11.1.1** Implement public bulletin board system
-- [ ] **11.1.2** Create message board management
-- [ ] **11.1.3** Add user authentication
-- [ ] **11.1.4** Implement message moderation
-- [ ] **11.1.5** Create board synchronization
+### 11.1 Web Interface Development
+- [ ] **11.1.1** Create local WiFi web interface
+- [ ] **11.1.2** Implement mobile-responsive design
+- [ ] **11.1.3** Add real-time chat functionality
+- [ ] **11.1.4** Create user authentication system
+- [ ] **11.1.5** Implement web interface testing
 
-### 11.2 MUD Integration
-- [ ] **11.2.1** Implement MUD micro-engine
-- [ ] **11.2.2** Create NPC librarian persona
-- [ ] **11.2.3** Add interactive commands
-- [ ] **11.2.4** Implement game state management
-- [ ] **11.2.5** Create multiplayer support
+### 11.2 Mobile Interface Development
+- [ ] **11.2.1** Create mobile app framework
+- [ ] **11.2.2** Implement mobile chat interface
+- [ ] **11.2.3** Add mobile-specific features
+- [ ] **11.2.4** Create mobile app testing
+- [ ] **11.2.5** Implement mobile app deployment
 
-### 11.3 Multi-Agent System
-- [ ] **11.3.1** Implement guild-specific personas
-- [ ] **11.3.2** Create agent coordination
-- [ ] **11.3.3** Add specialized knowledge bases
-- [ ] **11.3.4** Implement agent communication
-- [ ] **11.3.5** Create agent performance monitoring
+### 11.3 Voice Interface Development
+- [ ] **11.3.1** Implement speech-to-text integration
+- [ ] **11.3.2** Add text-to-speech capabilities
+- [ ] **11.3.3** Create voice command processing
+- [ ] **11.3.4** Implement voice interface testing
+- [ ] **11.3.5** Add voice interface optimization
 
-### 11.4 Inter-Node Synchronization
-- [ ] **11.4.1** Implement LoRa-based sync
-- [ ] **11.4.2** Add IPFS integration for content sharing
-- [ ] **11.4.3** Create conflict resolution
-- [ ] **11.4.4** Implement sync monitoring
-- [ ] **11.4.5** Add sync performance optimization
-
----
-
-## Success Criteria
-
-### MVP Completion Criteria
-- [ ] **Installation**: Deployable on fresh Pi 5 in ≤60 minutes
-- [ ] **Meshtastic Integration**: Connects to radio, posts 3 timed announcements
-- [ ] **DM Handling**: Processes 10 scripted DM queries with ≥90% accuracy
-- [ ] **Reliability**: Survives power loss with no message loss
-- [ ] **Offline Operation**: Runs ≥6 hours on battery power
-- [ ] **CLI Functionality**: All operator commands working
-
-### Performance Targets
-- [ ] **Response Time**: Median DM answer time < 3 minutes
-- [ ] **Reliability**: ≥95% scheduled announcements sent on time
-- [ ] **Accuracy**: ≥90% operator-rated "correct/helpful" responses
-- [ ] **Uptime**: Zero data loss across power cycles
-
-### Quality Assurance
-- [ ] **Testing**: Comprehensive test suite with unit, integration, and field tests
-- [ ] **Documentation**: Complete installation and operation guides
-- [ ] **Monitoring**: Full observability with structured logging
-- [ ] **Security**: Proper secrets management and sanitization
+### 11.4 API Gateway Development
+- [ ] **11.4.1** Create API gateway for all interfaces
+- [ ] **11.4.2** Implement API routing and load balancing
+- [ ] **11.4.3** Add API security and authentication
+- [ ] **11.4.4** Create API monitoring and analytics
+- [ ] **11.4.5** Implement API documentation
 
 ---
 
-## Risk Mitigation
+## Phase 12: Community Features
 
-### Technical Risks
-- **LLM Performance**: Test multiple models, implement fallbacks
-- **Memory Constraints**: Optimize for Pi 5 limitations, implement caching
-- **LoRa Reliability**: Add retry logic, implement message queuing
-- **Power Management**: Test battery life, implement graceful degradation
+### 12.1 Community Management
+- [ ] **12.1.1** Implement community user management
+- [ ] **12.1.2** Add community moderation tools
+- [ ] **12.1.3** Create community analytics
+- [ ] **12.1.4** Implement community feedback system
+- [ ] **12.1.5** Add community documentation
 
-### Operational Risks
-- **Deployment Complexity**: Create automated installation scripts
-- **Configuration Errors**: Add validation and testing tools
-- **Monitoring Gaps**: Implement comprehensive logging and metrics
-- **Recovery Procedures**: Create detailed runbooks and testing
-
----
-
-## Resource Requirements
-
-### Hardware
-- Raspberry Pi 5 (16GB RAM)
-- Meshtastic LoRa radio (USB)
-- SD card or SSD (64GB+)
-- Power supply and battery backup
-- Optional: Cooling fan, case
-
-### Software Dependencies
-- Python 3.9+
-- Ollama (ARM build)
-- Meshtastic Python library
-- ChromaDB or FAISS
-- Systemd services
-- Standard Linux utilities
-
-### Development Tools
-- Git for version control
-- Python virtual environment
-- Testing frameworks (pytest)
-- Code formatting tools
-- Documentation generators
+### 12.2 Community Integration
+- [ ] **12.2.1** Integrate with existing community tools
+- [ ] **12.2.2** Add community event integration
+- [ ] **12.2.3** Create community knowledge sharing
+- [ ] **12.2.4** Implement community collaboration features
+- [ ] **12.2.5** Add community support system
 
 ---
 
-## Development Sequence
+## Phase 13: Future Enhancements
 
-The phases are designed to be completed in sequence, with each phase building upon the previous ones:
+### 13.1 Advanced AI Features
+- [ ] **13.1.1** Implement advanced AI capabilities
+- [ ] **13.1.2** Add AI model fine-tuning
+- [ ] **13.1.3** Create AI performance optimization
+- [ ] **13.1.4** Implement AI learning and adaptation
+- [ ] **13.1.5** Add AI research and development
 
-1. **Foundation & Infrastructure**: Core project setup and basic RAG pipeline
-2. **Meshtastic Integration**: Radio communication and message handling
-3. **Queue System**: Persistent message queuing
-4. **RAG System**: Advanced knowledge base and retrieval
-5. **LLM Integration**: Local language model processing
-6. **Announcement System**: Scheduled message broadcasting
-7. **Operator CLI**: Management and monitoring interface
-8. **Integration & Testing**: End-to-end system testing
-9. **Deployment & Operations**: Production deployment
-10. **Advanced Features**: Enhanced functionality
+### 13.2 System Optimization
+- [ ] **13.2.1** Implement system performance optimization
+- [ ] **13.2.2** Add system scalability improvements
+- [ ] **13.2.3** Create system reliability enhancements
+- [ ] **13.2.4** Implement system security improvements
+- [ ] **13.2.5** Add system maintenance automation
+
+### 13.3 Community Expansion
+- [ ] **13.3.1** Implement multi-community support
+- [ ] **13.3.2** Add community federation
+- [ ] **13.3.3** Create community collaboration tools
+- [ ] **13.3.4** Implement community knowledge sharing
+- [ ] **13.3.5** Add community support and training
 
 ---
 
-## Conclusion
+## Current Status
 
-This roadmap provides a comprehensive path from initial development to a fully functional Meshtastic-focused digital librarian. The phased approach ensures steady progress while maintaining quality and reliability. The system will be capable of handling direct messages and group chat interactions as specified, with a strong foundation for future enhancements.
+**Phase 1**: Foundation and Core Infrastructure - **Completed**
+**Phase 2**: REST API Development - **Not Started**
+**Phase 3**: Comprehensive Test Suite - **Not Started**
+**Phase 4**: Meshtastic Integration - **Not Started**
+**Phase 5**: Persistent Queue System - **Not Started**
+**Phase 6**: Simplified RAG System Development - **Not Started**
+**Phase 7**: LLM Integration - **Not Started**
+**Phase 8**: Announcement System - **Not Started**
+**Phase 9**: System Integration and Deployment - **Not Started**
+**Phase 10**: Advanced Features - **Not Started**
+**Phase 11**: Multi-Modal Access Interfaces - **Not Started**
+**Phase 12**: Community Features - **Not Started**
+**Phase 13**: Future Enhancements - **Not Started**
 
-The key to success will be maintaining focus on the core requirements while building a robust, maintainable system that can operate reliably in off-grid environments. Regular testing and validation at each phase will ensure the final system meets all specified requirements and performance targets.
+---
+
+## Next Steps
+
+1. **Start Phase 2**: REST API Development
+2. **Begin Phase 3**: Comprehensive Test Suite
+3. **Plan Phase 4**: Meshtastic Integration
+4. **Design Phase 5**: Persistent Queue System
+5. **Architect Phase 6**: Simplified RAG System
+
+---
+
+## Notes
+
+- All phases are designed to be implemented incrementally
+- Each phase builds upon previous phases
+- Testing is integrated throughout all phases
+- Security considerations are embedded in all phases
+- Documentation is maintained throughout development
+- The system is designed for offline-first operation
+- Multi-modal access is planned for future phases
+- Community features are designed for long-term sustainability
+- **Agent-based architecture** with specialized models for different tasks
+- **Load monitoring and priority-based processing** for intelligent resource allocation
+- **Adversarial revision system** for high-quality responses
+- **Meshtastic node tracking and relationship management** for community trust
+- **Markdown-based RAG system** with direct file access using shell utilities (grep, cat, sed, head, tail)
