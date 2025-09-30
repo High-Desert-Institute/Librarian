@@ -111,12 +111,19 @@ This MVP is the first concrete “oracle” in the HDI stack. Future versions ad
    * Reads `schedule.yml`; sends timed messages
    * Supports “T-30, T-10, START” templates + ad-hoc override
 
-7. **Operator CLI**
+7. **REST API Service**
+
+   * HTTP API for chat processing and system management
+   * Handles `/chat` endpoint for message processing
+   * Provides `/health`, `/stats`, and `/admin` endpoints
+   * Runs as separate process from Meshtastic service
+
+8. **Operator CLI**
 
    * Inspect queue/state/logs
    * Send urgent broadcast; reload configs; rotate logs
 
-8. **Config & Secrets**
+9. **Config & Secrets**
 
    * `config.toml` checked in (non-secret)
    * Channel keys/PSKs stored in root-only file
@@ -128,8 +135,8 @@ This MVP is the first concrete “oracle” in the HDI stack. Future versions ad
                                                        ↓             ↑
                                                  [Operator CLI]      │
                                                        ↓             │
-                          [Announcement Scheduler] → [Adapter] ← [Responder Worker]
-                                                           ↑         │
+                          [Announcement Scheduler] → [Adapter] ← [Responder Worker] → [REST API Service]
+                                                           ↑                              │
                                                      [LLM Client] ← [RAG Service] ← [Shell Tools + Knowledge Base]
 ```
 
@@ -137,7 +144,7 @@ This MVP is the first concrete “oracle” in the HDI stack. Future versions ad
 
 ```
 hdl/
-├─ app/
+├─ meshtastic/           # Meshtastic service application
 │  ├─ adapter/           # Meshtastic I/O
 │  ├─ ingress/           # classify/route inbound
 │  ├─ queue/             # disk-backed queue
@@ -147,6 +154,17 @@ hdl/
 │  ├─ responder/         # dequeue + answer DMs
 │  ├─ cli/               # operator CLI
 │  └─ common/            # config, logging, utils
+├─ api/                  # REST API service application
+│  ├─ endpoints/         # API endpoint handlers
+│  ├─ middleware/        # API middleware (auth, logging, etc.)
+│  ├─ models/            # API data models
+│  ├─ services/          # Business logic services
+│  └─ common/            # shared API utilities
+├─ shared/               # Shared code between applications
+│  ├─ config/            # configuration management
+│  ├─ logging/           # logging utilities
+│  ├─ rag/               # RAG service (shared)
+│  └─ llm/               # LLM client (shared)
 ├─ configs/
 │  ├─ config.toml        # non-secret config
 │  ├─ channels.secrets   # PSKs/keys (0600)
@@ -155,7 +173,7 @@ hdl/
 ├─ corpus/
 │  ├─ docs/              # PDFs, txt, md (input)
 │  ├─ processed/         # chunked, cleaned markdown files
-│  └─ knowledge/          # organized markdown knowledge base
+│  └─ knowledge/         # organized markdown knowledge base
 ├─ ops/
 │  ├─ systemd/*.service
 │  ├─ scripts/*.sh
@@ -269,6 +287,11 @@ schedule_file = "./configs/schedule.yml"
 pre_start_offsets = [30, 10]  # minutes before start
 post_start_repeat_minutes = 0 # 0 = no repeat
 
+[api]
+host = "127.0.0.1"
+port = 8080
+enabled = true
+
 [logging]
 level = "INFO"
 dir = "./logs"
@@ -381,21 +404,40 @@ Please answer in ≤4 short lines.
 ### 9.2 Services (systemd)
 
 * `hdl-ollama.service` — ensures Ollama running
-* `hdl-core.service` — starts adapter, ingress, queue, responder, scheduler
+* `hdl-api.service` — starts REST API service (runs from `api/` directory)
+* `hdl-meshtastic.service` — starts Meshtastic service (runs from `meshtastic/` directory)
 * `hdl-target.service` — aggregate target (Wants=)
 
-*Minimal unit (example):*
+*Minimal unit examples:*
 
 ```ini
+# hdl-meshtastic.service
 [Unit]
-Description=HDL Core
+Description=HDL Meshtastic Service
 After=network-online.target hdl-ollama.service
 Wants=hdl-ollama.service
 
 [Service]
 User=pi
-WorkingDirectory=/home/pi/hdl
-ExecStart=/usr/bin/python3 -m app.cli run-core
+WorkingDirectory=/home/pi/hdl/meshtastic
+ExecStart=/usr/bin/python3 -m meshtastic.cli run-core
+Restart=always
+RestartSec=2
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target
+
+# hdl-api.service
+[Unit]
+Description=HDL API Service
+After=network-online.target hdl-ollama.service
+Wants=hdl-ollama.service
+
+[Service]
+User=pi
+WorkingDirectory=/home/pi/hdl/api
+ExecStart=/usr/bin/python3 -m api.main
 Restart=always
 RestartSec=2
 Environment=PYTHONUNBUFFERED=1

@@ -35,7 +35,14 @@ Librarian/
 ├── project-roadmap.md          # Comprehensive development roadmap
 ├── social-context.md           # Social context, partnerships, and community impact
 ├── README.md                   # This file - project overview and current status
-└── styleguides/                # Development style guides
+├── meshtastic/                  # Meshtastic service application
+├── api/                         # REST API service application
+├── shared/                      # Shared code between applications
+├── configs/                     # Configuration files
+├── corpus/                      # Knowledge base (markdown files)
+├── ops/                         # Operations and deployment
+├── tests/                       # Test suites
+└── styleguides/                 # Development style guides
     ├── README.md               # Styleguide overview
     ├── cli-development.md      # CLI logging and interpretability guidelines
     ├── java-cli-development.md # Java-specific CLI development practices
@@ -106,6 +113,7 @@ The system consists of several key components:
 - **Persistent Queue**: Disk-backed message queue for reliability
 - **RAG Service**: Local markdown knowledge base with shell-based file search
 - **LLM Client**: Local Ollama integration with Qwen3-4B model
+- **REST API Service**: HTTP API for chat processing and system management (separate process)
 - **Announcement Scheduler**: Timed message broadcasting
 - **Operator CLI**: Management and monitoring interface
 

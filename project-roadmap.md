@@ -13,11 +13,12 @@
 ## Phase 1: Foundation and Core Infrastructure
 
 ### 1.1 Project Setup and CLI Framework
-- [ ] **1.1.1** Create project structure and basic CLI framework
+- [ ] **1.1.1** Create project structure with separate `meshtastic/` and `api/` applications
 - [ ] **1.1.2** Implement structured JSON logging system
 - [ ] **1.1.3** Add log rotation and performance metrics
 - [ ] **1.1.4** Create testing framework with pytest
 - [ ] **1.1.5** Add Makefile for common development tasks
+- [ ] **1.1.6** Set up shared code structure in `shared/` directory
 
 ### 1.2 Configuration and Secrets Management
 - [ ] **1.2.1** Implement TOML-based configuration system
@@ -52,11 +53,13 @@
 ## Phase 2: REST API Development
 
 ### 2.1 REST API Foundation
-- [ ] **2.1.1** Design REST API architecture and endpoints
+- [ ] **2.1.1** Design REST API architecture as separate application in `api/` directory
 - [ ] **2.1.2** Implement FastAPI/Flask web framework integration
 - [ ] **2.1.3** Create API authentication and authorization system
 - [ ] **2.1.4** Add API documentation with OpenAPI/Swagger
 - [ ] **2.1.5** Implement API versioning and error handling
+- [ ] **2.1.6** Create separate systemd service for API application
+- [ ] **2.1.7** Set up shared code structure in `shared/` directory
 
 ### 2.2 Core API Endpoints
 - [ ] **2.2.1** Implement `/chat` endpoint for message processing
@@ -71,6 +74,7 @@
 - [ ] **2.3.3** Implement API rate limiting and security
 - [ ] **2.3.4** Add API logging and monitoring
 - [ ] **2.3.5** Create API configuration management
+- [ ] **2.3.6** Implement inter-process communication between API and Meshtastic services
 
 ---
 
@@ -428,7 +432,7 @@
 ## Current Status
 
 **Phase 1**: Foundation and Core Infrastructure - **Not Started**
-**Phase 2**: REST API Development - **Not Started**
+**Phase 2**: REST API Development (Separate Process) - **Not Started**
 **Phase 3**: Comprehensive Test Suite - **Not Started**
 **Phase 4**: Meshtastic Integration - **Not Started**
 **Phase 5**: Persistent Queue System - **Not Started**
@@ -468,3 +472,4 @@
 - **Adversarial revision system** for high-quality responses
 - **Meshtastic node tracking and relationship management** for community trust
 - **Markdown-based RAG system** with direct file access using shell utilities (grep, cat, sed, head, tail)
+- **Separate process architecture** with REST API service running independently from Meshtastic service
