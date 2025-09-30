@@ -131,8 +131,8 @@ Once development is complete, installation will be:
 1. Flash Raspberry Pi OS (64-bit, Lite)
 2. Install dependencies via automated script
 3. Clone repository and configure
-4. Run `hdl corpus ingest` to build knowledge base
-5. Start services with `hdl run-core`
+4. Run `librarian corpus ingest` to build knowledge base
+5. Start services with `librarian run-core`
 
 ## Contributing
 

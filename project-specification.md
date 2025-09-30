@@ -143,7 +143,7 @@ This MVP is the first concrete “oracle” in the HDI stack. Future versions ad
 ### 4.3 Directory Layout
 
 ```
-hdl/
+librarian/
 ├─ meshtastic/           # Meshtastic service application
 │  ├─ adapter/           # Meshtastic I/O
 │  ├─ ingress/           # classify/route inbound
@@ -233,11 +233,11 @@ hdl/
 
 ### 5.5 Operator CLI
 
-* `hdl status` — services, queue depth, last announce, last error
-* `hdl broadcast "msg"` — immediate group message
-* `hdl schedule reload` — re-read `schedule.yml`
-* `hdl corpus ingest` — (re)organize markdown knowledge base
-* `hdl tail` — follow logs
+* `librarian status` — services, queue depth, last announce, last error
+* `librarian broadcast "msg"` — immediate group message
+* `librarian schedule reload` — re-read `schedule.yml`
+* `librarian corpus ingest` — (re)organize markdown knowledge base
+* `librarian tail` — follow logs
 * Exit codes standard Unix semantics
 
 ---
@@ -258,7 +258,7 @@ hdl/
 
 ```toml
 [node]
-name = "hdl-librarian-01"
+name = "librarian-01"
 serial_device = "/dev/ttyACM0"   # auto-discover fallback
 time_zone = "America/Los_Angeles"
 
@@ -361,7 +361,7 @@ orgs:
 * Normalize → split into chunks (~300–500 tokens)
 * Organize markdown files in `./corpus/knowledge/` directory structure
 * Maintain file metadata: `source_path`, `title`, `updated_at`
-* Rebuild via `hdl corpus ingest`
+* Rebuild via `librarian corpus ingest`
 
 ### 8.3 Retrieval Strategy
 
@@ -398,28 +398,28 @@ Please answer in ≤4 short lines.
 3. Install **Ollama** (ARM build) and `ollama pull qwen3:4b-instruct-q4`
 4. `pip install meshtastic python-dotenv uvloop` (or requirements.txt)
 5. Clone repo, place `configs/`, `corpus/`
-6. Organize knowledge base: `hdl corpus ingest`
+6. Organize knowledge base: `librarian corpus ingest`
 7. Test Meshtastic serial connection (see `ops/scripts/meshtastic_probe.sh`)
 
 ### 9.2 Services (systemd)
 
-* `hdl-ollama.service` — ensures Ollama running
-* `hdl-api.service` — starts REST API service (runs from `api/` directory)
-* `hdl-meshtastic.service` — starts Meshtastic service (runs from `meshtastic/` directory)
-* `hdl-target.service` — aggregate target (Wants=)
+* `librarian-ollama.service` — ensures Ollama running
+* `librarian-api.service` — starts REST API service (runs from `api/` directory)
+* `librarian-meshtastic.service` — starts Meshtastic service (runs from `meshtastic/` directory)
+* `librarian-target.service` — aggregate target (Wants=)
 
 *Minimal unit examples:*
 
 ```ini
-# hdl-meshtastic.service
+# librarian-meshtastic.service
 [Unit]
-Description=HDL Meshtastic Service
-After=network-online.target hdl-ollama.service
-Wants=hdl-ollama.service
+Description=Librarian Meshtastic Service
+After=network-online.target librarian-ollama.service
+Wants=librarian-ollama.service
 
 [Service]
 User=pi
-WorkingDirectory=/home/pi/hdl/meshtastic
+WorkingDirectory=/home/pi/librarian/meshtastic
 ExecStart=/usr/bin/python3 -m meshtastic.cli run-core
 Restart=always
 RestartSec=2
@@ -428,15 +428,15 @@ Environment=PYTHONUNBUFFERED=1
 [Install]
 WantedBy=multi-user.target
 
-# hdl-api.service
+# librarian-api.service
 [Unit]
-Description=HDL API Service
-After=network-online.target hdl-ollama.service
-Wants=hdl-ollama.service
+Description=Librarian API Service
+After=network-online.target librarian-ollama.service
+Wants=librarian-ollama.service
 
 [Service]
 User=pi
-WorkingDirectory=/home/pi/hdl/api
+WorkingDirectory=/home/pi/librarian/api
 ExecStart=/usr/bin/python3 -m api.main
 Restart=always
 RestartSec=2
@@ -456,7 +456,7 @@ WantedBy=multi-user.target
 
 * JSON logs in `./logs/`
 * Rotate daily or 5 MB (whichever first)
-* `hdl tail` for quick inspection
+* `librarian tail` for quick inspection
 
 ---
 
@@ -539,7 +539,7 @@ WantedBy=multi-user.target
 
 **Event Day**
 
-* Set up solar/battery; boot; `hdl status`
+* Set up solar/battery; boot; `librarian status`
 * Push “System online” broadcast
 * Monitor queue depth; use CLI for urgent changes
 
