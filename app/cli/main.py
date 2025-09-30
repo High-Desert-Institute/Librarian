@@ -68,6 +68,10 @@ Examples:
     # Log tail command
     tail_parser = subparsers.add_parser("tail", help="Follow logs")
     
+    # Secrets management command
+    from app.cli.secrets import add_secrets_parser
+    add_secrets_parser(subparsers)
+    
     args = parser.parse_args()
     
     # Setup logging
@@ -88,6 +92,9 @@ Examples:
         return handle_run_core()
     elif args.command == "tail":
         return handle_tail()
+    elif args.command == "secrets":
+        from app.cli.secrets import handle_secrets_command
+        return handle_secrets_command(args)
     else:
         parser.print_help()
         return 0

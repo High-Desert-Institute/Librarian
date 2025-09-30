@@ -1,0 +1,33 @@
+[node]
+name = "hdl-librarian-01"
+serial_device = "/dev/ttyACM0"
+time_zone = "America/Los_Angeles"
+
+[meshtastic]
+group_channel = "decomp25"
+dm_ack_enabled = true
+dm_ack_text = "📚 Noted. Consulting the archives…"
+backlog_notice_threshold = 8
+backlog_notice_text = "⏳ Many queries in queue; replies may take a bit."
+
+[ollama]
+host = "127.0.0.1"
+port = 11434
+model = "qwen3:4b-instruct-q4"
+max_tokens = 256
+temperature = 0.3
+
+[rag]
+db_path = "./corpus/index"
+top_k = 6
+max_chunk_tokens = 350
+fallback_lexical = true
+
+[announce]
+schedule_file = "./configs/schedule.yml"
+pre_start_offsets = [ 30, 10,]
+post_start_repeat_minutes = 0
+
+[logging]
+level = "INFO"
+dir = "./logs"

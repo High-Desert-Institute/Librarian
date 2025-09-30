@@ -1,2 +1,11 @@
 {"timestamp": "2025-09-30T18:44:49.731817Z", "level": "INFO", "module": "logging", "function": "setup_logging", "line": 119, "message": "Logging system initialized", "component": "logging", "phase": "startup"}
 {"timestamp": "2025-09-30T18:44:49.732817Z", "level": "INFO", "module": "main", "function": "handle_status", "line": 97, "message": "Status command requested"}
+{"timestamp": "2025-09-30T18:46:31.604220Z", "level": "INFO", "module": "logging", "function": "setup_logging", "line": 119, "message": "Logging system initialized", "component": "logging", "phase": "startup"}
+{"timestamp": "2025-09-30T18:46:31.604220Z", "level": "WARNING", "module": "secrets", "function": "load_secrets", "line": 34, "message": "Secrets file configs\\channels.secrets has incorrect permissions: -rw-rw-rw-"}
+{"timestamp": "2025-09-30T18:46:31.607216Z", "level": "WARNING", "module": "secrets", "function": "load_secrets", "line": 35, "message": "Expected: -rw------- (0600)"}
+{"timestamp": "2025-09-30T18:46:31.607216Z", "level": "INFO", "module": "secrets", "function": "load_secrets", "line": 54, "message": "Loaded 2 secrets from configs\\channels.secrets"}
+{"timestamp": "2025-09-30T18:46:36.554395Z", "level": "INFO", "module": "logging", "function": "setup_logging", "line": 119, "message": "Logging system initialized", "component": "logging", "phase": "startup"}
+{"timestamp": "2025-09-30T18:46:36.555394Z", "level": "WARNING", "module": "secrets", "function": "load_secrets", "line": 34, "message": "Secrets file configs\\channels.secrets has incorrect permissions: -rw-rw-rw-"}
+{"timestamp": "2025-09-30T18:46:36.555394Z", "level": "WARNING", "module": "secrets", "function": "load_secrets", "line": 35, "message": "Expected: -rw------- (0600)"}
+{"timestamp": "2025-09-30T18:46:36.555394Z", "level": "INFO", "module": "secrets", "function": "load_secrets", "line": 54, "message": "Loaded 2 secrets from configs\\channels.secrets"}
+{"timestamp": "2025-09-30T18:46:36.555394Z", "level": "WARNING", "module": "secrets", "function": "validate_secrets", "line": 131, "message": "Channel test_channel has placeholder PSK value: TEST_PSK_VALUE"}

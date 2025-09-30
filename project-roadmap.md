@@ -3,6 +3,14 @@
 *Last updated: December 2024*  
 *Target: Meshtastic-focused digital librarian for off-grid knowledge sharing*
 
+## Roadmap Status Legend
+
+- **[ ]** - Not started
+- **[?]** - In progress / Testing / Development
+- **[x]** - Completed and tested
+
+**Important**: This roadmap must be kept current. Update checkbox status whenever tasks are started, completed, or when project details change. All changes to the project should be reflected in this roadmap.
+
 ## Executive Summary
 
 This roadmap outlines the development path for the Librarian project - a free, open-source, Meshtastic-focused digital librarian that can reply to direct messages and respond to group chat messages that start with "librarian" or are replies to its own posts. The system will run on a Raspberry Pi 5 with local LLM capabilities, providing offline-first knowledge sharing through the Meshtastic LoRa network.
@@ -29,22 +37,22 @@ The system consists of several key components:
 ## Phase 1: Foundation & Core Infrastructure
 
 ### 1.1 Project Setup & Structure
-- [ ] **1.1.1** Create project directory structure following the specification
-- [ ] **1.1.2** Set up Python virtual environment and dependencies
-- [ ] **1.1.3** Create basic configuration system (`config.toml`)
-- [ ] **1.1.4** Implement logging system with structured JSON output
-- [ ] **1.1.5** Create basic CLI framework with argparse
-- [ ] **1.1.6** Set up testing framework and initial test structure
+- [x] **1.1.1** Create project directory structure following the specification
+- [x] **1.1.2** Set up Python virtual environment and dependencies
+- [x] **1.1.3** Create basic configuration system (`config.toml`)
+- [x] **1.1.4** Implement logging system with structured JSON output
+- [x] **1.1.5** Create basic CLI framework with argparse
+- [x] **1.1.6** Set up testing framework and initial test structure
 
 ### 1.2 Configuration Management
-- [ ] **1.2.1** Implement TOML configuration parser
-- [ ] **1.2.2** Create secrets management for channel PSKs
-- [ ] **1.2.3** Add configuration validation and error handling
-- [ ] **1.2.4** Implement configuration reload functionality
-- [ ] **1.2.5** Create default configuration templates
+- [x] **1.2.1** Implement TOML configuration parser
+- [x] **1.2.2** Create secrets management for channel PSKs
+- [x] **1.2.3** Add configuration validation and error handling
+- [x] **1.2.4** Implement configuration reload functionality
+- [x] **1.2.5** Create default configuration templates
 
 ### 1.3 Logging & Monitoring
-- [ ] **1.3.1** Implement structured JSON logging
+- [x] **1.3.1** Implement structured JSON logging
 - [ ] **1.3.2** Add log rotation (daily or 5MB)
 - [ ] **1.3.3** Create log tail functionality for CLI
 - [ ] **1.3.4** Add performance metrics collection

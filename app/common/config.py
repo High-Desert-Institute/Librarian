@@ -22,13 +22,22 @@ class Config:
     def load_config(self) -> None:
         """Load configuration from TOML file"""
         if not self.config_path.exists():
+            logger.info(f"Config file {self.config_path} not found, creating default")
             self.create_default_config()
         
         try:
             with open(self.config_path, 'r', encoding='utf-8') as f:
                 self.config = toml.load(f)
+            logger.info(f"Loaded configuration from {self.config_path}")
+        except toml.TomlDecodeError as e:
+            logger.error(f"Invalid TOML syntax in {self.config_path}: {e}")
+            raise RuntimeError(f"Invalid TOML syntax in config file: {e}")
+        except FileNotFoundError:
+            logger.error(f"Config file not found: {self.config_path}")
+            raise RuntimeError(f"Config file not found: {self.config_path}")
         except Exception as e:
-            raise RuntimeError(f"Failed to load config from {self.config_path}: {e}")
+            logger.error(f"Failed to load config from {self.config_path}: {e}")
+            raise RuntimeError(f"Failed to load config: {e}")
     
     def create_default_config(self) -> None:
         """Create default configuration file"""
@@ -111,21 +120,89 @@ class Config:
         self.load_config()
     
     def validate(self) -> bool:
-        """Validate configuration"""
-        required_sections = ['node', 'meshtastic', 'ollama', 'rag', 'announce', 'logging']
+        """Validate configuration with detailed error reporting"""
+        errors = []
+        warnings = []
         
+        # Check required sections
+        required_sections = ['node', 'meshtastic', 'ollama', 'rag', 'announce', 'logging']
         for section in required_sections:
             if section not in self.config:
-                return False
+                errors.append(f"Missing required section: {section}")
+        
+        if errors:
+            for error in errors:
+                logger.error(error)
+            return False
+        
+        # Validate node section
+        node_config = self.config.get('node', {})
+        if not node_config.get('name'):
+            errors.append("Node name is required")
+        if not node_config.get('serial_device'):
+            errors.append("Serial device is required")
+        
+        # Validate meshtastic section
+        meshtastic_config = self.config.get('meshtastic', {})
+        if not meshtastic_config.get('group_channel'):
+            errors.append("Group channel is required")
+        
+        # Validate ollama section
+        ollama_config = self.config.get('ollama', {})
+        if not ollama_config.get('host'):
+            errors.append("Ollama host is required")
+        if not ollama_config.get('model'):
+            errors.append("Ollama model is required")
+        
+        # Validate rag section
+        rag_config = self.config.get('rag', {})
+        if not rag_config.get('db_path'):
+            errors.append("RAG database path is required")
+        
+        # Check for reasonable values
+        if ollama_config.get('max_tokens', 0) <= 0:
+            warnings.append("Ollama max_tokens should be positive")
+        
+        if rag_config.get('top_k', 0) <= 0:
+            warnings.append("RAG top_k should be positive")
+        
+        # Log warnings
+        for warning in warnings:
+            logger.warning(warning)
+        
+        # Log errors and return
+        if errors:
+            for error in errors:
+                logger.error(error)
+            return False
+        
+        logger.info("Configuration validation passed")
+        return True
+    
+    def get_validation_errors(self) -> List[str]:
+        """Get list of validation errors without logging"""
+        errors = []
+        
+        # Check required sections
+        required_sections = ['node', 'meshtastic', 'ollama', 'rag', 'announce', 'logging']
+        for section in required_sections:
+            if section not in self.config:
+                errors.append(f"Missing required section: {section}")
+        
+        if errors:
+            return errors
         
         # Validate specific values
         if not self.config['node'].get('name'):
-            return False
-        
+            errors.append("Node name is required")
         if not self.config['meshtastic'].get('group_channel'):
-            return False
+            errors.append("Group channel is required")
+        if not self.config['ollama'].get('host'):
+            errors.append("Ollama host is required")
+        if not self.config['rag'].get('db_path'):
+            errors.append("RAG database path is required")
         
-        return True
+        return errors
 
 # Global config instance
 _config: Optional[Config] = None
